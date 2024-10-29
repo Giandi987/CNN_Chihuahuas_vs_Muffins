@@ -4,44 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-    <title>Chihuahua or Muffin?</title>
+    <title>Muffin o Chihuahua</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main>
-    <h1>Chihuahua or Muffin?</h1>
+    <div id="main">
+        <div class="format">
+            <h1>Muffin or Chihuahua?</h1>
+        </div>
 
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label for="Chihuhia-or-Muffin">Upload your photo</label>
-        <input type="file" name="Chihuhia-or-Muffin" id="Chihuhia-or-Muffin" accept="image/*">
-        <button type="submit">Predict with AI integrations!</button>
-    </form>
+        <div class="format">
+            <form id="fileForm">
+                <label for="fileInput" class="format">Upload an image:</label>
+                <input type="file" id="fileInput" accept="image/*">
+            </form>
+        </div>
 
-    <div class="result">
-        <h2>Result will be displayed here</h2>
+        <div class="format">
+            <button id="submitButton">Predict with AI integrations</button>
+        </div>
+
+        <div class="format" id="imageBox">
+            <p>No image found.</p>
+        </div>
+        <div class="format" id="resultBox">
+            <p>Result</p>
+        </div>
     </div>
-
-    <div class="image-preview" id="image-preview">
-        <span>No found image.</span>
-    </div>
-
-</main>
 
     <script>
-        // Select file input and preview container
-        const fileInput = document.getElementById('Chihuhia-or-Muffin');
-        const imagePreview = document.getElementById('image-preview');
-        const form = document.getElementById('uploadForm');
-        const resultDiv = document.querySelector('.result');
+        document.getElementById('submitButton').addEventListener('click', function () {
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
+        });
 
-        // Preview the image before upload
+
+        // Seleziona il file input e il contenitore per l'anteprima
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imageBox');
+        const form = document.getElementById('fileForm');
+        const resultDiv = document.getElementById('resultBox');
+
+        // Anteprima dell'immagine prima dell'upload
         fileInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
 
@@ -58,13 +63,13 @@
             }
         });
 
-        // Handle form submission
+        // Gestisci l'invio del form
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = new FormData(form);
 
-            // Send the image via POST to the Flask backend
+            // Invia l'immagine via POST al backend Flask
             const response = await fetch('/predict', {
                 method: 'POST',
                 body: formData
@@ -72,11 +77,13 @@
 
             const result = await response.json();
 
-            // Display result
+            // Mostra il risultato
             resultDiv.innerHTML = `<h2>${result.label}: ${result.confidence}% confidence</h2>`;
         });
     </script>
 
+
+    </script>
 </body>
 
 </html>
